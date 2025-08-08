@@ -1,0 +1,36 @@
+// soil 
+
+#include <LiquidCrystal_I2C.h> // Include the LiquidCrystal_I2C library
+
+// Define LCD parameters (adjust based on your specific display)
+LiquidCrystal_I2C lcd(0x27, 16, 2);  // Set the LCD I2C address, columns, and rows
+
+int sensorPin = A0;  // Analog pin connected to the sensor
+float voltage;
+float moisture;
+
+void setup() {
+  Serial.begin(9600);
+  lcd.begin();          // Initialize the LCD
+  lcd.backlight();      // Turn on the LCD backlight
+}
+
+void loop() {
+  voltage = analogRead(sensorPin);  // Read analog voltage from the sensor
+  // Convert voltage to moisture percentage (adjust the formula if needed)
+  moisture = (voltage * 100.0) / 1023.0;
+
+  // Display moisture on LCD
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Soil Moisture:");
+  lcd.setCursor(0, 1);
+  lcd.print(moisture);
+  lcd.print("%");
+
+  Serial.print("Moisture: ");
+  Serial.print(moisture);
+  Serial.println("%");
+
+  delay(1000); // Delay between readings
+}
